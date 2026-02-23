@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رواق كوثر | HK Book Land</title>
+    <link rel="apple-touch-icon" href="https://via.placeholder.com/180/0EA5E9/FFFFFF?text=HK">
+<meta name="apple-mobile-web-app-title" content="رواق كوثر">
+<meta name="mobile-web-app-capable" content="yes">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap');
+        :root { --sky: #0EA5E9; --bg: #F8FAFC; --text: #1E293B; --card: #ffffff; }
+        .dark-mode { --bg: #0F172A; --text: #F1F5F9; --card: #1E293B; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; scroll-behavior: smooth; }
+        .font-amiri { font-family: 'Amiri', serif; }
+        .glass { background: var(--card); border: 1px solid rgba(14, 165, 233, 0.1); backdrop-filter: blur(10px); }
+        .book-card { transition: 0.3s; border-radius: 2rem; }
+        .book-card:hover { transform: translateY(-10px); shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(8px); overflow-y: auto; }
+        .active-tab { background-color: var(--sky) !important; color: white !important; opacity: 1 !important; }
+        @media print { .no-print { display: none !important; } #thermal-area { display: block !important; width: 80mm; color: black; background: white; } }
+    </style>
+</head>
+<body>
+
+    <nav class="no-print sticky top-0 z-50 glass px-4 py-3 border-b border-sky-100 dark:border-sky-900">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold">HK</div>
+                <h1 class="font-amiri text-xl font-bold text-sky-600">رواق كوثر</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleDarkMode()" class="p-2 text-sky-500"><i class="fas fa-adjust text-xl"></i></button>
+                <div class="flex bg-gray-100 dark:bg-slate-800 p-1 rounded-2xl scale-90 md:scale-100">
+                    <button onclick="switchTab('shop')" id="btn-shop" class="active-tab px-4 py-2 rounded-xl text-xs font-bold transition">المتجر</button>
+                    <button onclick="switchTab('track')" id="btn-track" class="px-4 py-2 text-xs font-bold opacity-60 transition">تتبع</button>
+                    <button onclick="protectedTab('admin')" id="btn-admin" class="px-4 py-2 text-xs font-bold opacity-60 transition">الإدارة</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-4">
+        
+        <section id="sec-shop" class="space-y-10 py-6">
+            <div class="text-center space-y-3">
+                <h2 class="font-amiri text-5xl text-sky-500 italic">رواق كوثر</h2>
+                <p class="opacity-70">بين الرفوف.. حكايا تنتظر من يقرؤها</p>
+            </div>
+            <div id="books-gallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        </section>
+
+        <section id="sec-track" class="hidden py-10">
+            <div class="max-w-md mx-auto glass p-8 rounded-[2.5rem] shadow-2xl text-center">
+                <h3 class="font-amiri text-3xl text-sky-500 mb-6">أين وصل كتابي؟</h3>
+                <div class="flex gap-2 mb-6">
+                    <input type="text" id="trackInput" placeholder="أدخل رقم الطلب (HK-XXXX)" class="flex-1 p-4 rounded-2xl border outline-none dark:bg-slate-700">
+                    <button onclick="trackOrder()" class="bg-sky-500 text-white px-6 rounded-2xl"><i class="fas fa-search"></i></button>
+                </div>
+                <div id="trackResult" class="hidden space-y-4">
+                    <div class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mx-auto text-sky-500 text-3xl animate-bounce">
+                        <i class="fas fa-truck-loading"></i>
+                    </div>
+                    <p class="font-bold text-lg text-sky-600">طلبك قيد التجهيز بعناية ✨</p>
+                    <p id="trackBookName" class="text-sm font-bold"></p>
+                    <div class="p-4 bg-sky-50 dark:bg-slate-800 rounded-2xl italic text-xs opacity-80" id="trackQuote"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-admin" class="hidden space-y-6 py-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass p-6 rounded-3xl border-b-4 border-green-500 text-center">
+                    <h4 class="text-xs font-bold opacity-60">الأرباح</h4>
+                    <p id="total-revenue" class="text-xl font-bold text-green-500">0 دج</p>
+                </div>
+                <div class="glass p-6 rounded-3xl border-b-4 border-sky-500 text-center">
+                    <h4 class="text-xs font-bold opacity-60">أفضل ولاية</h4>
+                    <p id="top-wilaya" class="text-xl font-bold text-sky-500">---</p>
+                </div>
+            </div>
+            <div class="glass p-8 rounded-[2rem]">
+                <h3 class="font-bold mb-4 italic">إضافة كتاب جديد</h3>
+                <form id="addBookForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="bTitle" placeholder="اسم الكتاب" class="p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
+                    <input type="number" id="bPrice" placeholder="السعر" class="p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="document.getElementById('bFile').click()" class="flex-1 border-2 border-dashed rounded-2xl text-sky-500 font-bold">صورة</button>
+                        <input type="file" id="bFile" class="hidden" accept="image/*" onchange="handleFile(this)">
+                        <button type="submit" class="flex-1 bg-sky-500 text-white rounded-2xl font-bold">حفظ</button>
+                    </div>
+                </form>
+            </div>
+            <div id="admin-orders-list" class="space-y-3"></div>
+        </section>
+
+    </main>
+
+    <div id="orderModal" class="modal no-print flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <div class="p-6 bg-sky-500 text-white text-center">
+                <img id="mBookImg" src="" class="h-40 mx-auto rounded-2xl shadow-xl mb-4 object-cover">
+                <h2 id="mBookTitle" class="text-2xl font-amiri font-bold"></h2>
+                <p id="mBookPrice" class="font-bold opacity-90"></p>
+            </div>
+            <form id="orderForm" class="p-8 space-y-4">
+                <input type="hidden" id="selectedBookIdx">
+                <input type="text" id="cName" placeholder="الاسم الكامل" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="tel" id="cPhone" placeholder="رقم الهاتف" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
+                    <select id="cWilaya" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700"></select>
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg hover:bg-green-600 transition">
+                    <i class="fab fa-whatsapp"></i> تأكيد الطلب (واتساب)
+                </button>
+                <button type="button" onclick="closeModal()" class="w-full text-xs opacity-50">إلغاء</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="thermal-area" class="hidden"></div>
+
+    <script>
+        const KAWTHAR_WA = "213669837391";
+        const PIN = "1234";
+        const quotes = [
+            "الكتاب هو الجليس الذي لا يطريك، والصديق الذي لا يغريك.", "البيت بلا كتب.. جسد بلا روح.", "القراءة هي تذكرة سفر لعدة حيوات.", "من يقرأ يعش ألف عام.",
+            "ليس هناك صديق أوفى من الكتاب.", "القراءة هي العضلات التي تبني بها عقلك.", "تفاءل بما تهوى.. يكن.", "ما تقرؤه اليوم، سيحدد من ستكون غداً.",
+            "النجاح ليس مفتاح السعادة، بل السعادة هي مفتاح النجاح.", "الجمال ليس في الأشياء، بل في العقل الذي يدركها.", "السر في الحياة هو ألا تعتاد على شيء.",
+            "كل يوم هو صفحة جديدة في كتاب حياتك.", "القراءة هي التنفس الفكري للإنسان.", "ختام كل كتاب هو بداية لفكرة جديدة.", "اصنع من حطامك حياة.",
+            "الوقت الذي تستمتع بإضاعته ليس وقتاً ضائعاً.", "الكلمة الطيبة كالشجرة الطيبة.", "الكتب تفتح نوافذ الروح.", "العلم صيد، والكتابة قيد.",
+            "كن أنت التغيير الذي تريد أن تراه.", "لا يهم كم من الكتب تقرأ، المهم ماذا تترك الكتب فيك.", "الكتب هي الآثار الأكثر بقاءً للروح.",
+            "اقرأ لتعيش، لا لتعرف فقط.", "الحكيم هو من يعرف أنه لا يعرف الكثير.", "عقل المتعلم هو قصر لا يسكنه الظلام.", "الصبر مرّ، لكن ثمرته حلوة.",
+            "كن صبوراً، فالأشياء الجميلة تحتاج وقتاً.", "الحياة رواية تستحق القراءة.", "كل كتاب تقرؤه هو حياة جديدة.", "رواق كوثر يتمنى لك قراءة ممتعة."
+        ];
+
+        const wilayas = ["01 أدرار", "02 الشلف", "03 الأغواط", "04 أم البواقي", "05 باتنة", "06 بجاية", "07 بسكرة", "08 بشار", "09 البليدة", "10 البويرة", "11 تمنراست", "12 تبسة", "13 تلمسان", "14 تيارت", "15 تيزي وزو", "16 الجزائر", "17 الجلفة", "18 جيجل", "19 سطيف", "20 سعيدة", "21 سكيكدة", "22 سيدي بلعباس", "23 عنابة", "24 قالمة", "25 قسنطينة", "26 المدية", "27 مستغانم", "28 المسيلة", "29 معسكر", "30 ورقلة", "31 وهران", "32 البيض", "33 إليزي", "34 برج بوعريريج", "35 بومرداس", "36 الطارف", "37 تندوف", "38 تسمسيلت", "39 الوادي", "40 خنشلة", "41 سوق أهراس", "42 تيبازة", "43 ميلة", "44 عين الدفلى", "45 النعامة", "46 عين تموشنت", "47 غرداية", "48 غليزان", "49 تيميمون", "50 برج باجي مختار", "51 أولاد جلال", "52 بني عباس", "53 عين صالح", "54 عين قزام", "55 تقرت", "56 جانت", "57 المغير", "58 المنيعة"];
+
+        let inventory = JSON.parse(localStorage.getItem('HK_INV_FINAL')) || [];
+        let orders = JSON.parse(localStorage.getItem('HK_ORD_FINAL')) || [];
+        let tempImg = "";
+
+        document.getElementById('cWilaya').innerHTML = wilayas.map(w => `<option value="${w}">${w}</option>`).join('');
+
+        function switchTab(t) {
+            ['shop', 'track', 'admin'].forEach(s => {
+                document.getElementById('sec-'+s).classList.add('hidden');
+                document.getElementById('btn-'+s).classList.remove('active-tab');
+                document.getElementById('btn-'+s).classList.add('opacity-60');
+            });
+            document.getElementById('sec-'+t).classList.remove('hidden');
+            document.getElementById('btn-'+t).classList.add('active-tab');
+            document.getElementById('btn-'+t).classList.remove('opacity-60');
+            updateUI();
+        }
+
+        function protectedTab(t) { if(prompt("رمز دخول الإدارة:") === PIN) switchTab(t); }
+
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
+
+        function handleFile(input) {
+            const reader = new FileReader();
+            reader.onload = e => tempImg = e.target.result;
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        document.getElementById('addBookForm').onsubmit = e => {
+            e.preventDefault();
+            if(!tempImg) return alert("اختر صورة!");
+            inventory.push({ id: Date.now(), title: document.getElementById('bTitle').value, price: document.getElementById('bPrice').value, img: tempImg });
+            localStorage.setItem('HK_INV_FINAL', JSON.stringify(inventory));
+            e.target.reset(); tempImg = ""; updateUI();
+        };
+
+        function updateUI() {
+            document.getElementById('books-gallery').innerHTML = inventory.map((b, idx) => `
+                <div class="glass p-4 rounded-3xl book-card text-center shadow-sm" onclick="openOrderModal(${idx})">
+                    <img src="${b.img}" class="h-44 w-full object-cover rounded-2xl mb-3 shadow">
+                    <h3 class="font-bold text-xs truncate px-1">${b.title}</h3>
+                    <p class="text-sky-500 font-bold">${b.price} دج</p>
+                </div>
+            `).join('');
+
+            if(orders.length > 0) {
+                document.getElementById('total-revenue').innerText = orders.reduce((s,o) => s+Number(o.price), 0) + " دج";
+                const wMap = {}; orders.forEach(o => wMap[o.wilaya] = (wMap[o.wilaya] || 0) + 1);
+                document.getElementById('top-wilaya').innerText = Object.keys(wMap).reduce((a,b) => wMap[a] > wMap[b] ? a : b).split(' ')[1];
+            }
+
+            document.getElementById('admin-orders-list').innerHTML = orders.map(o => `
+                <div class="glass p-4 rounded-2xl flex justify-between items-center border-r-4 border-sky-500 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <img src="${o.img}" class="w-10 h-10 rounded-full object-cover">
+                        <div><p class="font-bold text-sm">${o.name} <span class="text-[9px] opacity-40">#${o.oid}</span></p>
+                        <p class="text-[10px] opacity-60">${o.book} - ${o.wilaya}</p></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="printBill('${o.oid}')" class="text-sky-500 p-2"><i class="fas fa-print"></i></button>
+                        <button onclick="delOrder('${o.oid}')" class="text-red-400 p-2"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function trackOrder() {
+            const id = document.getElementById('trackInput').value.toUpperCase();
+            const o = orders.find(x => x.oid === id);
+            const res = document.getElementById('trackResult');
+            if(o) {
+                res.classList.remove('hidden');
+                document.getElementById('trackBookName').innerText = `كتابك: ${o.book}`;
+                document.getElementById('trackQuote').innerText = `"${o.quote}"`;
+            } else alert("الرقم غير موجود في سجلاتنا");
+        }
+
+        function openOrderModal(idx) {
+            const b = inventory[idx];
+            document.getElementById('selectedBookIdx').value = idx;
+            document.getElementById('mBookImg').src = b.img;
+            document.getElementById('mBookTitle').innerText = b.title;
+            document.getElementById('mBookPrice').innerText = b.price + " دج";
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+
+        document.getElementById('orderForm').onsubmit = e => {
+            e.preventDefault();
+            const b = inventory[document.getElementById('selectedBookIdx').value];
+            const oid = 'HK-' + Math.floor(1000 + Math.random()*8999);
+            const quote = quotes[Math.floor(Math.random()*quotes.length)];
+
+            orders.unshift({ oid, name: document.getElementById('cName').value, phone: document.getElementById('cPhone').value, wilaya: document.getElementById('cWilaya').value, book: b.title, price: b.price, img: b.img, quote, date: new Date().toLocaleDateString('ar-DZ') });
+            localStorage.setItem('HK_ORD_FINAL', JSON.stringify(orders));
+
+            const msg = `*طلب جديد من رواق كوثر* 📚%0A*رقم الطلب:* ${oid}%0A*الزبون:* ${document.getElementById('cName').value}%0A*الكتاب:* ${b.title}%0A%0A_حكمة اليوم: ${quote}_`;
+            window.open(`https://wa.me/${KAWTHAR_WA}?text=${msg}`, '_blank');
+            closeModal(); updateUI();
+        };
+
+        function printBill(id) {
+            const o = orders.find(x => x.oid === id);
+            const area = document.getElementById('thermal-area');
+            area.innerHTML = `
+                <div style="width: 75mm; padding: 5mm; text-align: center; color: black; font-family: 'Cairo';">
+                    <div style="border: 2px solid black; border-radius: 50%; width: 20mm; height: 20mm; margin: 0 auto; line-height: 20mm; font-size: 20px;"><b>HK</b></div>
+                    <h2 style="margin: 5px 0;">رواق كوثر</h2>
+                    <p style="font-size: 10px;">${o.oid} | ${o.date}</p>
+                    <hr style="border: 0.5px dashed black; margin: 10px 0;">
+                    <div style="text-align: right; font-size: 12px; line-height: 1.6;">
+                        <p><b>الزبون:</b> ${o.name}</p>
+                        <p><b>الولاية:</b> ${o.wilaya}</p>
+                        <p><b>الكتاب:</b> ${o.book}</p>
+                        <p style="font-size: 14px;"><b>المجموع: ${o.price} DA</b></p>
+                    </div>
+                    <hr style="border: 0.5px dashed black; margin: 10px 0;">
+                    <p style="font-size: 10px; font-style: italic;">"${o.quote}"</p>
+                </div>`;
+            window.print();
+        }
+
+        function delOrder(id) { if(confirm('حذف؟')) { orders = orders.filter(x => x.oid !== id); localStorage.setItem('HK_ORD_FINAL', JSON.stringify(orders)); updateUI(); } }
+
+        updateUI();
+    </script>
+</body>
+</html>
