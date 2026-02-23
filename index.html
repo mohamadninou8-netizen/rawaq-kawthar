@@ -6,9 +6,6 @@
     <title>رواق كوثر | HK Book Land</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="apple-touch-icon" href="https://via.placeholder.com/180/0EA5E9/FFFFFF?text=HK">
-    <meta name="apple-mobile-web-app-title" content="رواق كوثر">
-    <meta name="mobile-web-app-capable" content="yes">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap');
         :root { --sky: #0EA5E9; --bg: #F8FAFC; --text: #1E293B; --card: #ffffff; }
@@ -26,7 +23,7 @@
     <nav class="no-print sticky top-0 z-50 glass px-4 py-3 border-b">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold">HK</div>
+                <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">HK</div>
                 <h1 class="font-amiri text-xl font-bold text-sky-600">رواق كوثر</h1>
             </div>
             <div class="flex items-center gap-2">
@@ -45,72 +42,87 @@
         <section id="sec-shop" class="space-y-10 py-6">
             <div class="text-center space-y-3">
                 <h2 class="font-amiri text-5xl text-sky-500 italic">رواق كوثر</h2>
-                <p class="opacity-70 italic">"بين رفوفنا حكاية تنتظرك"</p>
+                <p class="opacity-70 italic">"بين رفوفنا حكاية تنتظر من يقرؤها"</p>
             </div>
             <div id="books-gallery" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
         </section>
 
         <section id="sec-track" class="hidden py-10">
             <div class="max-w-md mx-auto glass p-8 rounded-[2.5rem] shadow-2xl text-center">
-                <h3 class="font-amiri text-3xl text-sky-500 mb-6">أين وصل طلبي؟</h3>
+                <h3 class="font-amiri text-3xl text-sky-500 mb-6 font-bold">تتبع طلبك</h3>
                 <div class="flex gap-2 mb-6">
                     <input type="text" id="trackInput" placeholder="HK-XXXX" class="flex-1 p-4 rounded-2xl border outline-none dark:bg-slate-700">
-                    <button onclick="trackOrder()" class="bg-sky-500 text-white px-6 rounded-2xl"><i class="fas fa-search"></i></button>
+                    <button onclick="trackOrder()" class="bg-sky-500 text-white px-6 rounded-2xl hover:bg-sky-600 transition"><i class="fas fa-search"></i></button>
                 </div>
                 <div id="trackResult" class="hidden space-y-4">
-                    <div class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mx-auto text-sky-500 text-3xl animate-bounce">
-                        <i class="fas fa-truck-loading"></i>
+                    <div class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mx-auto text-sky-500 text-3xl animate-pulse">
+                        <i class="fas fa-box-open"></i>
                     </div>
                     <p class="font-bold text-lg text-sky-600">طلبك قيد التجهيز بعناية ✨</p>
-                    <div class="p-4 bg-sky-50 dark:bg-slate-800 rounded-2xl italic text-xs opacity-80" id="trackQuote"></div>
+                    <div class="p-4 bg-sky-50 dark:bg-slate-800 rounded-2xl italic text-xs border border-sky-100" id="trackQuote"></div>
                 </div>
             </div>
         </section>
 
         <section id="sec-admin" class="hidden space-y-6 py-6">
             <div class="grid grid-cols-2 gap-4">
-                <div class="glass p-6 rounded-3xl text-center border-b-4 border-green-500">
-                    <h4 class="text-xs font-bold opacity-60">الأرباح</h4>
-                    <p id="total-revenue" class="text-xl font-bold text-green-500">0 دج</p>
+                <div class="glass p-6 rounded-3xl text-center border-b-4 border-green-500 shadow-sm">
+                    <h4 class="text-xs font-bold opacity-60">الأرباح التقديرية</h4>
+                    <p id="total-revenue" class="text-2xl font-bold text-green-500">0 دج</p>
                 </div>
-                <div class="glass p-6 rounded-3xl text-center border-b-4 border-sky-500">
-                    <h4 class="text-xs font-bold opacity-60">الطلبات</h4>
-                    <p id="order-count" class="text-xl font-bold text-sky-500">0</p>
+                <div class="glass p-6 rounded-3xl text-center border-b-4 border-sky-500 shadow-sm">
+                    <h4 class="text-xs font-bold opacity-60">إجمالي الطلبات</h4>
+                    <p id="order-count" class="text-2xl font-bold text-sky-500">0</p>
                 </div>
             </div>
-            <div class="glass p-8 rounded-[2rem]">
+
+            <div class="glass p-6 rounded-[2rem] space-y-4">
+                <h3 class="font-bold">إدارة البيانات</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="exportData()" class="bg-gray-100 dark:bg-slate-700 p-4 rounded-2xl text-xs font-bold hover:bg-gray-200 transition">
+                        <i class="fas fa-download ml-2"></i> نسخة احتياطية
+                    </button>
+                    <button onclick="importData()" class="bg-gray-100 dark:bg-slate-700 p-4 rounded-2xl text-xs font-bold hover:bg-gray-200 transition">
+                        <i class="fas fa-upload ml-2"></i> استعادة البيانات
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass p-8 rounded-[2rem] shadow-sm">
                 <h3 class="font-bold mb-4">إضافة كتاب جديد</h3>
                 <form id="addBookForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <input type="text" id="bTitle" placeholder="اسم الكتاب" class="p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
-                    <input type="number" id="bPrice" placeholder="السعر" class="p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
+                    <input type="number" id="bPrice" placeholder="السعر (دج)" class="p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
                     <div class="flex gap-2">
-                        <button type="button" onclick="document.getElementById('bFile').click()" class="flex-1 border-2 border-dashed rounded-2xl text-sky-500 font-bold">صورة</button>
+                        <button type="button" onclick="document.getElementById('bFile').click()" class="flex-1 border-2 border-dashed border-sky-300 rounded-2xl text-sky-500 font-bold hover:bg-sky-50 transition">صورة</button>
                         <input type="file" id="bFile" class="hidden" accept="image/*" onchange="handleFile(this)">
-                        <button type="submit" class="flex-1 bg-sky-500 text-white rounded-2xl font-bold">حفظ</button>
+                        <button type="submit" class="flex-1 bg-sky-500 text-white rounded-2xl font-bold shadow-lg hover:bg-sky-600 transition">حفظ</button>
                     </div>
                 </form>
             </div>
+            
             <div id="admin-orders-list" class="space-y-3"></div>
         </section>
-
     </main>
 
     <div id="orderModal" class="modal no-print flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2.5rem] overflow-hidden">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl scale-up-center">
             <div class="p-6 bg-sky-500 text-white text-center">
-                <img id="mBookImg" src="" class="h-40 mx-auto rounded-2xl shadow-xl mb-4 object-cover">
+                <img id="mBookImg" src="" class="h-44 mx-auto rounded-2xl shadow-xl mb-4 object-cover">
                 <h2 id="mBookTitle" class="text-2xl font-amiri font-bold"></h2>
-                <p id="mBookPrice" class="font-bold"></p>
+                <p id="mBookPrice" class="font-bold text-lg opacity-90"></p>
             </div>
             <form id="orderForm" class="p-8 space-y-4">
                 <input type="hidden" id="selectedBookIdx">
-                <input type="text" id="cName" placeholder="الاسم الكامل" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
+                <input type="text" id="cName" placeholder="الاسم الكامل" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700 focus:border-sky-500 transition" required>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="tel" id="cPhone" placeholder="رقم الهاتف" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700" required>
-                    <select id="cWilaya" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700"></select>
+                    <input type="tel" id="cPhone" placeholder="رقم الهاتف" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700 focus:border-sky-500 transition" required>
+                    <select id="cWilaya" class="w-full p-4 border rounded-2xl outline-none dark:bg-slate-700 focus:border-sky-500 transition"></select>
                 </div>
-                <button type="submit" class="w-full bg-green-500 text-white py-4 rounded-2xl font-bold shadow-lg">تأكيد الطلب عبر واتساب</button>
-                <button type="button" onclick="closeModal()" class="w-full text-xs opacity-50">إلغاء</button>
+                <button type="submit" class="w-full bg-green-500 text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-green-600 transition flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-xl"></i> تأكيد الطلب عبر واتساب
+                </button>
+                <button type="button" onclick="closeModal()" class="w-full text-xs opacity-50 hover:opacity-100 transition">إلغاء الطلب</button>
             </form>
         </div>
     </div>
@@ -119,8 +131,15 @@
 
     <script>
         const KAWTHAR_WA = "213669837391";
-        const PIN = "1234";
-        const quotes = ["الكتاب هو الجليس الذي لا يطريك، والصديق الذي لا يغريك.", "البيت بلا كتب.. جسد بلا روح.", "تفاءل بما تهوى.. يكن.", "القراءة هي تذكرة سفر لعدة حيوات.", "ما تقرؤه اليوم، سيحدد من ستكون غداً.", "الصبر مرّ، لكن ثمرته حلوة."];
+        const PIN = "kawtar2003";
+        const quotes = [
+            "الكتاب خير جليس في الزمان.",
+            "اقرأ لتعيش مرتين.",
+            "العلم صيد والكتابة قيده.",
+            "تفاءل بما تهوى.. يكن.",
+            "البيت بلا كتب.. جسد بلا روح.",
+            "القراءة هي نافذة العالم."
+        ];
         const wilayas = ["01 أدرار", "02 الشلف", "03 الأغواط", "04 أم البواقي", "05 باتنة", "06 بجاية", "07 بسكرة", "08 بشار", "09 البليدة", "10 البويرة", "11 تمنراست", "12 تبسة", "13 تلمسان", "14 تيارت", "15 تيزي وزو", "16 الجزائر", "17 الجلفة", "18 جيجل", "19 سطيف", "20 سعيدة", "21 سكيكدة", "22 سيدي بلعباس", "23 عنابة", "24 قالمة", "25 قسنطينة", "26 المدية", "27 مستغانم", "28 المسيلة", "29 معسكر", "30 ورقلة", "31 وهران", "32 البيض", "33 إليزي", "34 برج بوعريريج", "35 بومرداس", "36 الطارف", "37 تندوف", "38 تسمسيلت", "39 الوادي", "40 خنشلة", "41 سوق أهراس", "42 تيبازة", "43 ميلة", "44 عين الدفلى", "45 النعامة", "46 عين تموشنت", "47 غرداية", "48 غليزان", "49 تيميمون", "50 برج باجي مختار", "51 أولاد جلال", "52 بني عباس", "53 عين صالح", "54 عين قزام", "55 تقرت", "56 جانت", "57 المغير", "58 المنيعة"];
 
         let inventory = JSON.parse(localStorage.getItem('HK_INV')) || [];
@@ -149,30 +168,48 @@
 
         document.getElementById('addBookForm').onsubmit = e => {
             e.preventDefault();
-            if(!tempImg) return alert("اختر صورة!");
+            if(!tempImg) return alert("الرجاء اختيار صورة للكتاب");
             inventory.push({ id: Date.now(), title: document.getElementById('bTitle').value, price: document.getElementById('bPrice').value, img: tempImg });
             localStorage.setItem('HK_INV', JSON.stringify(inventory));
             e.target.reset(); tempImg = ""; updateUI();
         };
 
         function updateUI() {
-            document.getElementById('books-gallery').innerHTML = inventory.map((b, idx) => `
-                <div class="glass p-4 rounded-3xl text-center shadow-sm" onclick="openOrderModal(${idx})">
-                    <img src="${b.img}" class="h-44 w-full object-cover rounded-2xl mb-3 shadow">
-                    <h3 class="font-bold text-xs truncate">${b.title}</h3>
-                    <p class="text-sky-500 font-bold">${b.price} دج</p>
-                </div>
-            `).join('');
+            const gallery = document.getElementById('books-gallery');
+            if (inventory.length === 0) {
+                gallery.className = "col-span-full flex flex-col items-center justify-center p-10 text-center space-y-4";
+                gallery.innerHTML = `
+                    <div class="w-24 h-24 bg-sky-100 rounded-full flex items-center justify-center text-sky-500 text-4xl shadow-inner">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3 class="font-amiri text-2xl font-bold text-sky-600">أهلاً بكِ يا كوثر!</h3>
+                    <p class="max-w-xs opacity-70 text-sm">المتجر فارغ حالياً.. ابدئي بإضافة أول كتاب من قسم الإدارة ليظهر هنا للزبائن.</p>
+                `;
+            } else {
+                gallery.className = "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6";
+                gallery.innerHTML = inventory.map((b, idx) => `
+                    <div class="glass p-4 rounded-3xl text-center shadow-sm hover:shadow-md transition cursor-pointer group" onclick="openOrderModal(${idx})">
+                        <div class="overflow-hidden rounded-2xl mb-3 h-44">
+                            <img src="${b.img}" class="h-full w-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h3 class="font-bold text-xs truncate">${b.title}</h3>
+                        <p class="text-sky-500 font-bold">${b.price} دج</p>
+                    </div>
+                `).join('');
+            }
 
             document.getElementById('total-revenue').innerText = orders.reduce((s,o) => s+Number(o.price), 0) + " دج";
             document.getElementById('order-count').innerText = orders.length;
 
             document.getElementById('admin-orders-list').innerHTML = orders.map(o => `
                 <div class="glass p-4 rounded-2xl flex justify-between items-center border-r-4 border-sky-500 shadow-sm">
-                    <div><p class="font-bold text-sm">${o.name} (#${o.oid})</p><p class="text-[10px] opacity-60">${o.book} - ${o.wilaya}</p></div>
-                    <div class="flex gap-2">
-                        <button onclick="printBill('${o.oid}')" class="text-sky-500 p-2"><i class="fas fa-print"></i></button>
-                        <button onclick="delOrder('${o.oid}')" class="text-red-400 p-2"><i class="fas fa-trash"></i></button>
+                    <div>
+                        <p class="font-bold text-sm">${o.name} <span class="text-[10px] text-sky-500">(#${o.oid})</span></p>
+                        <p class="text-[10px] opacity-60">${o.book} - ${o.wilaya}</p>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="printBill('${o.oid}')" class="text-sky-500 p-2 hover:bg-sky-50 rounded-xl transition"><i class="fas fa-print"></i></button>
+                        <button onclick="delOrder('${o.oid}')" class="text-red-400 p-2 hover:bg-red-50 rounded-xl transition"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -191,41 +228,94 @@
 
         document.getElementById('orderForm').onsubmit = e => {
             e.preventDefault();
-            const b = inventory[document.getElementById('selectedBookIdx').value];
+            const bIdx = document.getElementById('selectedBookIdx').value;
+            const b = inventory[bIdx];
             const wSelect = document.getElementById('cWilaya');
-            const wilayaName = wSelect.options[wSelect.selectedIndex].text; // الحل النهائي للهواتف
+            const wilayaName = wSelect.options[wSelect.selectedIndex].text;
             const oid = 'HK-' + Math.floor(1000 + Math.random()*8999);
             const quote = quotes[Math.floor(Math.random()*quotes.length)];
 
-            const oData = { oid, name: document.getElementById('cName').value, phone: document.getElementById('cPhone').value, wilaya: wilayaName, book: b.title, price: b.price, quote, date: new Date().toLocaleDateString('ar-DZ') };
-            
-            orders.unshift(oData);
+            const orderObj = {
+                oid,
+                name: document.getElementById('cName').value,
+                phone: document.getElementById('cPhone').value,
+                wilaya: wilayaName,
+                book: b.title,
+                price: b.price,
+                quote,
+                date: new Date().toLocaleDateString('ar-DZ')
+            };
+
+            orders.unshift(orderObj);
             localStorage.setItem('HK_ORD', JSON.stringify(orders));
 
-            const msg = `*طلب جديد من رواق كوثر* 📚%0A*الرقم:* ${oid}%0A*الزبون:* ${oData.name}%0A*الولاية:* ${wilayaName}%0A*الكتاب:* ${b.title}`;
+            const msg = `*طلب جديد من رواق كوثر* 📚%0A%0A*رقم الطلب:* ${oid}%0A*الزبون:* ${orderObj.name}%0A*الولاية:* ${wilayaName}%0A*الكتاب:* ${b.title}%0A*السعر:* ${b.price} دج%0A%0A_حكمة اليوم: ${quote}_`;
             window.open(`https://wa.me/${KAWTHAR_WA}?text=${msg}`, '_blank');
             closeModal(); updateUI();
         };
 
+        function trackOrder() {
+            const val = document.getElementById('trackInput').value.toUpperCase();
+            const o = orders.find(x => x.oid === val);
+            if(o) {
+                document.getElementById('trackResult').classList.remove('hidden');
+                document.getElementById('trackQuote').innerText = `بوقالة الطلب: "${o.quote}"`;
+            } else {
+                alert("عذراً، هذا الرقم غير مسجل لدينا.");
+            }
+        }
+
         function printBill(id) {
             const o = orders.find(x => x.oid === id);
             const area = document.getElementById('thermal-area');
-            area.innerHTML = `<div style="text-align:center;font-family:Cairo;color:black;"><h3>رواق كوثر</h3><p>${o.oid} | ${o.date}</p><hr><p>الزبون: ${o.name}</p><p>الولاية: ${o.wilaya}</p><p>الكتاب: ${o.book}</p><h4>المجموع: ${o.price} DA</h4><hr><i>"${o.quote}"</i></div>`;
+            area.innerHTML = `
+                <div style="text-align:center; direction:rtl; font-family:sans-serif;">
+                    <h2 style="margin:5px 0;">رواق كوثر</h2>
+                    <p style="font-size:12px;">وصل طلب رقم: ${o.oid}</p>
+                    <hr>
+                    <div style="text-align:right; font-size:14px;">
+                        <p>الزبون: ${o.name}</p>
+                        <p>الولاية: ${o.wilaya}</p>
+                        <p>الكتاب: ${o.book}</p>
+                        <p>التاريخ: ${o.date}</p>
+                    </div>
+                    <hr>
+                    <h3 style="margin:10px 0;">المجموع: ${o.price} دج</h3>
+                    <p style="font-size:10px; font-style:italic;">شكرًا لاختياركم رواق كوثر</p>
+                </div>
+            `;
             window.print();
         }
 
-        function trackOrder() {
-            const id = document.getElementById('trackInput').value.toUpperCase();
-            const o = orders.find(x => x.oid === id);
-            if(o) {
-                document.getElementById('trackResult').classList.remove('hidden');
-                document.getElementById('trackQuote').innerText = `"${o.quote}"`;
-            } else alert("الرقم غير صحيح!");
+        function exportData() {
+            const data = { inv: localStorage.getItem('HK_INV'), ord: localStorage.getItem('HK_ORD') };
+            const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `HK_Backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
         }
 
-        function delOrder(id) { if(confirm('حذف؟')) { orders = orders.filter(x => x.oid !== id); localStorage.setItem('HK_ORD', JSON.stringify(orders)); updateUI(); } }
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = e => {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const data = JSON.parse(ev.target.result);
+                    localStorage.setItem('HK_INV', data.inv);
+                    localStorage.setItem('HK_ORD', data.ord);
+                    alert("تم استعادة البيانات بنجاح!");
+                    location.reload();
+                };
+                reader.readAsText(e.target.files[0]);
+            };
+            input.click();
+        }
 
+        function delOrder(id) { if(confirm('هل أنتِ متأكدة من حذف هذا الطلب من السجل؟')) { orders = orders.filter(x => x.oid !== id); localStorage.setItem('HK_ORD', JSON.stringify(orders)); updateUI(); } }
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
+        
         updateUI();
     </script>
 </body>
